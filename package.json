@@ -1,0 +1,57 @@
+{
+  "name": "swipey",
+  "version": "0.1.0",
+  "description": "Add swipe or pull listeners",
+  "main": "dist",
+  "scripts": {
+    "watch": "webpack --mode development --watch",
+    "build": "webpack",
+    "test": "jest --coverage --testPathPattern=__tests__/index.test.js",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "prepublishOnly": "rm -rf dist && npm run build && npm t -- --silent"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helloitsjoe/swipey.git"
+  },
+  "keywords": [
+    "swipe",
+    "js",
+    "javascript"
+  ],
+  "author": "Joe Boyle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/helloitsjoe/swipey/issues"
+  },
+  "files": [
+    "/dist",
+    "README.md"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-push": "npm t -- --silent"
+    }
+  },
+  "homepage": "https://github.com/helloitsjoe/swipey#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "@testing-library/dom": "^7.29.0",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.2",
+    "eslint": "^7.16.0",
+    "eslint-config-helloitsjoe": "^1.2.4",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^4.3.6",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-simple": "^1.7.1"
+  }
+}
