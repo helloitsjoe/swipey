@@ -1,5 +1,3 @@
-export const onPull = () => {};
-
 export const Directions = {
   DOWN: 'DOWN',
   UP: 'UP',
@@ -15,11 +13,11 @@ export const Types = {
 const { DOWN, UP, LEFT, RIGHT } = Directions;
 
 // TODO: Handle multi-touch
-export const onSwipe = (
+export default function onSwipe(
   direction,
   trigger,
   { type = Types.SWIPE, deltaX = 100, deltaY = 100, mustBeAtTopOfScreen = false } = {}
-) => {
+) {
   // TODO: Handle swipe vs drag with elapsed time
   let upX;
   let upY;
@@ -70,4 +68,4 @@ export const onSwipe = (
     document.removeEventListener('touchstart', downHandler);
     document.removeEventListener('touchend', upHandler);
   };
-};
+}
