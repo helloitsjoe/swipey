@@ -1,5 +1,5 @@
 import { fireEvent } from '@testing-library/dom';
-import { onSwipe, Directions } from '../index';
+import onSwipe, { Directions } from '../index';
 
 const { DOWN, LEFT, RIGHT, UP } = Directions;
 
