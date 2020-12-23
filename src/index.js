@@ -15,8 +15,14 @@ const { DOWN, UP, LEFT, RIGHT } = Directions;
 // TODO: Handle multi-touch
 export default function onSwipe(
   direction,
-  trigger,
-  { type = Types.SWIPE, deltaX = 100, deltaY = 100, mustBeAtTopOfScreen = false } = {}
+  handler,
+  {
+    deltaX = 100,
+    deltaY = 100,
+    element = document,
+    onlyAtTop = false,
+    type = Types.SWIPE,
+  } = {}
 ) {
   // TODO: Handle swipe vs drag with elapsed time
   let upX;
@@ -25,8 +31,6 @@ export default function onSwipe(
   let downY;
 
   let scrollY;
-
-  // console.log('type', type);
 
   const setDownY = e => {
     downY = e.touches[0].clientY;
@@ -40,32 +44,35 @@ export default function onSwipe(
   const setUpY = e => {
     upY = e.changedTouches[0].clientY;
 
-    const isInPosition = mustBeAtTopOfScreen ? scrollY === 0 : true;
-    const pulledDownEnough = direction === UP ? downY - upY > deltaY : upY - downY > deltaY;
+    const isInPosition = onlyAtTop ? scrollY === 0 : true;
+    const pulledDownEnough =
+      direction === UP ? downY - upY >= deltaY : upY - downY >= deltaY;
 
     if (isInPosition && pulledDownEnough) {
-      trigger();
+      handler();
     }
   };
 
   const setUpX = e => {
     upX = e.changedTouches[0].clientX;
 
-    const swipedEnough = direction === LEFT ? downX - upX > deltaX : upX - downX > deltaX;
+    const swipedEnough =
+      direction === LEFT ? downX - upX >= deltaX : upX - downX >= deltaX;
 
     if (swipedEnough) {
-      trigger();
+      handler();
     }
   };
 
-  const downHandler = direction === DOWN || direction === UP ? setDownY : setDownX;
+  const downHandler =
+    direction === DOWN || direction === UP ? setDownY : setDownX;
   const upHandler = direction === DOWN || direction === UP ? setUpY : setUpX;
 
-  document.addEventListener('touchstart', downHandler);
-  document.addEventListener('touchend', upHandler);
+  element.addEventListener('touchstart', downHandler);
+  element.addEventListener('touchend', upHandler);
 
   return () => {
-    document.removeEventListener('touchstart', downHandler);
-    document.removeEventListener('touchend', upHandler);
+    element.removeEventListener('touchstart', downHandler);
+    element.removeEventListener('touchend', upHandler);
   };
 }
