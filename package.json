@@ -30,7 +30,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-push": "npm t -- --silent"
+      "pre-push": "npm t -- --silent && yarn build"
     }
   },
   "homepage": "https://github.com/helloitsjoe/swipey#readme",

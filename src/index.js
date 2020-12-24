@@ -1,4 +1,4 @@
-import { getTimestamp } from './utils';
+import { getTimestamp, validateOptions } from './utils';
 
 export const Directions = {
   DOWN: 'DOWN',
@@ -15,11 +15,16 @@ export const Types = {
 const { DOWN, UP, LEFT, RIGHT } = Directions;
 
 // TODO: Handle multi-touch
-export default function onSwipe(
-  direction,
-  handler,
-  { delta = 100, timeout = Infinity, fromTop = false, element = document } = {}
-) {
+export default function onSwipe(direction, handler, options = {}) {
+  validateOptions(options);
+
+  const {
+    delta = 100,
+    timeout = Infinity,
+    fromTop = false,
+    element = document,
+  } = options;
+
   let upX;
   let upY;
   let downX;
