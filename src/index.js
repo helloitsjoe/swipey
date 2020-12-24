@@ -1,3 +1,5 @@
+import { getTimestamp } from './utils';
+
 export const Directions = {
   DOWN: 'DOWN',
   UP: 'UP',
@@ -16,63 +18,56 @@ const { DOWN, UP, LEFT, RIGHT } = Directions;
 export default function onSwipe(
   direction,
   handler,
-  {
-    deltaX = 100,
-    deltaY = 100,
-    element = document,
-    onlyAtTop = false,
-    type = Types.SWIPE,
-  } = {}
+  { delta = 100, timeout = Infinity, fromTop = false, element = document } = {}
 ) {
-  // TODO: Handle swipe vs drag with elapsed time
   let upX;
   let upY;
   let downX;
   let downY;
-
   let scrollY;
+  let startTimestamp;
 
-  const setDownY = e => {
+  const setDown = e => {
+    downX = e.touches[0].clientX;
     downY = e.touches[0].clientY;
     scrollY = window.scrollY;
+    startTimestamp = getTimestamp();
   };
 
-  const setDownX = e => {
-    downX = e.touches[0].clientX;
-  };
-
-  const setUpY = e => {
+  const setUp = e => {
+    upX = e.changedTouches[0].clientX;
     upY = e.changedTouches[0].clientY;
 
-    const isInPosition = onlyAtTop ? scrollY === 0 : true;
-    const pulledDownEnough =
-      direction === UP ? downY - upY >= deltaY : upY - downY >= deltaY;
+    const isInPosition = fromTop ? scrollY === 0 : true;
 
-    if (isInPosition && pulledDownEnough) {
+    const isFarEnough = () => {
+      const actualDeltaX = direction === LEFT ? downX - upX : upX - downX;
+      const actualDeltaY = direction === UP ? downY - upY : upY - downY;
+
+      const actualDelta = [UP, DOWN].includes(direction)
+        ? actualDeltaY
+        : actualDeltaX;
+
+      return actualDelta >= delta;
+    };
+
+    if (
+      isInPosition &&
+      isFarEnough() &&
+      getTimestamp() - startTimestamp < timeout
+    ) {
+      // TODO: Pass args
       handler();
     }
+
+    startTimestamp = null;
   };
 
-  const setUpX = e => {
-    upX = e.changedTouches[0].clientX;
-
-    const swipedEnough =
-      direction === LEFT ? downX - upX >= deltaX : upX - downX >= deltaX;
-
-    if (swipedEnough) {
-      handler();
-    }
-  };
-
-  const downHandler =
-    direction === DOWN || direction === UP ? setDownY : setDownX;
-  const upHandler = direction === DOWN || direction === UP ? setUpY : setUpX;
-
-  element.addEventListener('touchstart', downHandler);
-  element.addEventListener('touchend', upHandler);
+  element.addEventListener('touchstart', setDown);
+  element.addEventListener('touchend', setUp);
 
   return () => {
-    element.removeEventListener('touchstart', downHandler);
-    element.removeEventListener('touchend', upHandler);
+    element.removeEventListener('touchstart', setDown);
+    element.removeEventListener('touchend', setUp);
   };
 }

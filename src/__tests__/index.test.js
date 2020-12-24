@@ -1,18 +1,26 @@
 import { fireEvent } from '@testing-library/dom';
 import onSwipe, { Directions } from '../index';
 import { swipes, testSwipe, touchDown, touchUp } from '../test-utils';
+import { getTimestamp } from '../utils';
+
+jest.mock('../utils');
 
 const { DOWN, LEFT, RIGHT, UP } = Directions;
 
 let handler;
+let offSwipe;
 
 beforeEach(() => {
   handler = jest.fn();
+  getTimestamp.mockImplementation(() => Date.now());
+  offSwipe = () => {};
 });
 
 afterEach(() => {
   window.scrollY = 0;
   jest.clearAllMocks();
+  // Remove event listeners
+  offSwipe();
 });
 
 describe('onSwipe', () => {
@@ -29,7 +37,7 @@ describe('onSwipe', () => {
       );
       expect(otherDirections.includes(direction)).toBe(false);
 
-      onSwipe(direction, handler);
+      offSwipe = onSwipe(direction, handler);
 
       otherDirections.forEach(dir => {
         swipes[dir]();
@@ -43,7 +51,7 @@ describe('onSwipe', () => {
 
   describe('Options', () => {
     it('onlyAtTop does not trigger unless window.scrollY is 0', () => {
-      onSwipe(DOWN, handler, { onlyAtTop: true });
+      offSwipe = onSwipe(DOWN, handler, { fromTop: true });
 
       window.scrollY = 10;
       testSwipe({ y: 50 }, { y: 250 });
@@ -54,16 +62,28 @@ describe('onSwipe', () => {
       expect(handler).toBeCalledTimes(1);
     });
 
+    it('Does not trigger if timeout has passed', () => {
+      offSwipe = onSwipe(DOWN, handler, { timeout: 100 });
+      getTimestamp.mockReturnValueOnce(0).mockReturnValueOnce(200);
+
+      testSwipe({ y: 50 }, { y: 250 });
+      expect(handler).not.toBeCalled();
+
+      // After mocks, should trigger normally
+      testSwipe({ y: 50 }, { y: 250 });
+      expect(handler).toBeCalledTimes(1);
+    });
+
     it.each`
       direction | touchStart    | touchEndBad  | touchEndGood
-      ${DOWN}   | ${{ y: 50 }}  | ${{ y: 70 }} | ${{ y: 150 }}
-      ${UP}     | ${{ y: 150 }} | ${{ y: 70 }} | ${{ y: 50 }}
-      ${RIGHT}  | ${{ x: 50 }}  | ${{ x: 70 }} | ${{ x: 150 }}
-      ${LEFT}   | ${{ x: 150 }} | ${{ x: 70 }} | ${{ x: 50 }}
+      ${DOWN}   | ${{ y: 50 }}  | ${{ y: 70 }} | ${{ y: 250 }}
+      ${UP}     | ${{ y: 250 }} | ${{ y: 70 }} | ${{ y: 50 }}
+      ${RIGHT}  | ${{ x: 50 }}  | ${{ x: 70 }} | ${{ x: 250 }}
+      ${LEFT}   | ${{ x: 250 }} | ${{ x: 70 }} | ${{ x: 50 }}
     `(
       'Does not trigger if minimum $direction deltaY is not met',
       ({ direction, touchStart, touchEndBad, touchEndGood }) => {
-        onSwipe(direction, handler, { deltaY: 100 });
+        offSwipe = onSwipe(direction, handler, { delta: 200 });
 
         // pull but not far enough
         testSwipe(touchStart, touchEndBad);
@@ -80,7 +100,7 @@ describe('onSwipe', () => {
       document.body.appendChild(div);
       const element = document.getElementById('test');
 
-      onSwipe(DOWN, handler, { element });
+      offSwipe = onSwipe(DOWN, handler, { element });
 
       testSwipe({ y: 50 }, { y: 250 });
       expect(handler).toBeCalledTimes(0);
@@ -93,7 +113,7 @@ describe('onSwipe', () => {
 
   describe('Event listeners', () => {
     it('Calls handler for each swipe', () => {
-      onSwipe(DOWN, handler);
+      offSwipe = onSwipe(DOWN, handler);
       testSwipe({ y: 50 }, { y: 250 });
       expect(handler).toBeCalledTimes(1);
       testSwipe({ y: 50 }, { y: 250 });
@@ -101,7 +121,7 @@ describe('onSwipe', () => {
     });
 
     it('Returns a function that removes event listeners', () => {
-      const offSwipe = onSwipe(DOWN, handler);
+      offSwipe = onSwipe(DOWN, handler);
       testSwipe({ y: 50 }, { y: 250 });
       expect(handler).toBeCalledTimes(1);
 
