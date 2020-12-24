@@ -3,7 +3,11 @@ import onSwipe, { Directions } from '../index';
 import { swipes, testSwipe, touchDown, touchUp } from '../test-utils';
 import { getTimestamp } from '../utils';
 
-jest.mock('../utils');
+jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
+  getTimestamp: jest.fn(() => Date.now()),
+  __esModule: true,
+}));
 
 const { DOWN, LEFT, RIGHT, UP } = Directions;
 
@@ -12,7 +16,6 @@ let offSwipe;
 
 beforeEach(() => {
   handler = jest.fn();
-  getTimestamp.mockImplementation(() => Date.now());
   offSwipe = () => {};
 });
 
