@@ -49,6 +49,8 @@ describe('onSwipe', () => {
       expect(handler).toBeCalledTimes(0);
       swipes[direction]();
       expect(handler).toBeCalledTimes(1);
+      const handlerArg = handler.mock.calls[0][0];
+      expect(handlerArg).toBeInstanceOf(TouchEvent);
     });
   });
 

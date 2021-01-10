@@ -1,11 +1,13 @@
-const validOptions = ['delta', 'timeout', 'fromTop', 'element'];
+const validOptions = ['delta', 'timeout', 'fromTop', 'element', 'logger'];
 
 // TODO: Remove this with TS
 export const validateOptions = (options = {}) => {
+  const { logger = console } = options;
+
   // eslint-disable-next-line no-restricted-syntax
   for (const key of Object.keys(options)) {
     if (!validOptions.includes(key)) {
-      console.warn(`${key} is not a valid option`);
+      logger.warn(`${key} is not a valid option`);
     }
   }
 };

@@ -61,8 +61,7 @@ export default function onSwipe(direction, handler, options = {}) {
       isFarEnough() &&
       getTimestamp() - startTimestamp < timeout
     ) {
-      // TODO: Pass args
-      handler();
+      handler(e);
     }
 
     startTimestamp = null;
