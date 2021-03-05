@@ -12,7 +12,7 @@ export const Types = {
   DRAG: 'DRAG',
 };
 
-const { DOWN, UP, LEFT, RIGHT } = Directions;
+const { DOWN, UP, LEFT } = Directions;
 
 // TODO: Handle multi-touch
 export default function onSwipe(direction, handler, options = {}) {
