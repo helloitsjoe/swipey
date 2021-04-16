@@ -1,15 +1,10 @@
-import { getTimestamp, validateOptions } from './utils';
+import { getTimestamp, validateOptions } from './utils.js';
 
 export const Directions = {
   DOWN: 'DOWN',
   UP: 'UP',
   LEFT: 'LEFT',
   RIGHT: 'RIGHT',
-};
-
-export const Types = {
-  SWIPE: 'SWIPE',
-  DRAG: 'DRAG',
 };
 
 const { DOWN, UP, LEFT } = Directions;

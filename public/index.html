@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swipey demo</title>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      text-align: center;
+      height: 100vh;;
+    }
+
+    .block {
+      border-radius: 2px;
+      border: 1px solid cornflowerblue;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-self: flex-end;
+      bottom: 0;
+      justify-content: center;
+      height: 50vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+  <h2 id="message">Swipe!</h2>
+  <div class="block">Swipe here</div></div>
+  <script type="module">
+    import onSwipe, {Directions} from '/src/index.js';
+    const block = document.querySelector('.block')
+
+    const print = message => document.getElementById('message').textContent = message;
+    const printEl = message => block.textContent = message;
+
+    const offLeft = onSwipe(Directions.LEFT, () => window.location.reload());
+    const offRight = onSwipe(Directions.RIGHT, () => print('You swiped right'));
+    const offUp = onSwipe(Directions.UP, () => print('You swiped up'));
+    const offDown = onSwipe(Directions.DOWN, () => print('You swiped down'));
+
+    const offElLeft = onSwipe(Directions.LEFT, (e) => {
+      e.stopPropagation();
+      printEl('You swiped left on the box')
+    }, {element: block});
+    const offElRight = onSwipe(Directions.RIGHT, (e) => {
+      e.stopPropagation()
+      printEl('You swiped right on the box')
+    }, {element: block});
+    const offElUp = onSwipe(Directions.UP, (e) => {
+      e.stopPropagation()
+      printEl('You swiped up on the box')
+    }, {element: block});
+    const offElDown = onSwipe(Directions.DOWN, (e) => {
+      e.stopPropagation()
+      printEl('You swiped down on the box')
+    }, {element: block});
+  </script>
+</body>
+</html>

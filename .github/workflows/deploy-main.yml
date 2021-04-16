@@ -1,0 +1,15 @@
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: c-hive/gha-yarn-cache@v1
+      - run: yarn
+      - run: yarn test
+      - uses: helloitsjoe/deploy-github-pages@v1
+        with:
+          build_dir: public

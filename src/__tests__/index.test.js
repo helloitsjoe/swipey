@@ -86,7 +86,7 @@ describe('onSwipe', () => {
       ${RIGHT}  | ${{ x: 50 }}  | ${{ x: 70 }} | ${{ x: 250 }}
       ${LEFT}   | ${{ x: 250 }} | ${{ x: 70 }} | ${{ x: 50 }}
     `(
-      'Does not trigger if minimum $direction deltaY is not met',
+      'Does not trigger if minimum $direction delta is not met',
       ({ direction, touchStart, touchEndBad, touchEndGood }) => {
         offSwipe = onSwipe(direction, handler, { delta: 200 });
 
