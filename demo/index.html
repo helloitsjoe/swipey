@@ -37,6 +37,7 @@
 
     const print = message => document.getElementById('message').textContent = message;
     const printEl = message => block.textContent = message;
+    const capture = fn => e => e.stopPropagation() || fn();
 
     const offLeft = onSwipe(Directions.LEFT, () => window.location.reload());
     const offRight = onSwipe(Directions.RIGHT, () => print('You swiped right'));
