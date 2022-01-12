@@ -55,7 +55,7 @@ describe('onSwipe', () => {
   });
 
   describe('Options', () => {
-    it('onlyAtTop does not trigger unless window.scrollY is 0', () => {
+    it('fromTop does not trigger unless window.scrollY is 0', () => {
       offSwipe = onSwipe(DOWN, handler, { fromTop: true });
 
       window.scrollY = 10;

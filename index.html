@@ -6,43 +6,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swipey demo</title>
   <style>
+    * {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
     .container {
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
-      text-align: center;
+      justify-content: space-around;
+      align-items: center;
       height: 100vh;;
     }
 
     .block {
-      border-radius: 2px;
-      border: 1px solid cornflowerblue;
+      border-radius: 8px;
+      background-color:black;
+      color: white;
       display: flex;
       flex-direction: column;
-      text-align: center;
-      justify-self: flex-end;
-      bottom: 0;
       justify-content: center;
+      text-align: center;
+      width: 80%;
       height: 50vh;
     }
   </style>
 </head>
 <body>
   <div class="container">
-  <h2 id="message">Swipe!</h2>
-  <div class="block">Swipe here</div></div>
+    <h2 id="message">Swipe!</h2>
+    <div class="block">Swipe here</div>
+  </div>
   <script type="module">
-    import onSwipe, {Directions} from '../src/index.js';
-    const block = document.querySelector('.block')
+    import onSwipe, {Directions} from './src/index.js';
+    const block = document.querySelector('.block');
+    console.log('here')
 
     const print = message => document.getElementById('message').textContent = message;
     const printEl = message => block.textContent = message;
     const capture = fn => e => e.stopPropagation() || fn();
 
-    const offLeft = onSwipe(Directions.LEFT, () => window.location.reload());
-    const offRight = onSwipe(Directions.RIGHT, () => print('You swiped right'));
     const offUp = onSwipe(Directions.UP, () => print('You swiped up'));
-    const offDown = onSwipe(Directions.DOWN, () => print('You swiped down'));
+    const offDown = onSwipe(Directions.DOWN, () => {
+      print('Refreshing');
+      window.location.reload()
+    });
+    const offLeft = onSwipe(Directions.LEFT, () => print('You swiped left'));
+    const offRight = onSwipe(Directions.RIGHT, () => print('You swiped right'));
 
     const offElLeft = onSwipe(Directions.LEFT, (e) => {
       e.stopPropagation();
