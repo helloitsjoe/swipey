@@ -3569,10 +3569,10 @@ jest-serializer@^27.4.0:
     "@types/node" "*"
     graceful-fs "^4.2.4"
 
-jest-simple-config@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/jest-simple-config/-/jest-simple-config-0.4.0.tgz#ddad65d19df9b0df016e0742ccb29ada1e65dc64"
-  integrity sha512-NtkP6uWozTODrzhQFaG9nwBMn9b9xpOgLttYh2Vlm1rGwli2kszuwnys2lmcDAECYJ2W2jzxsnuv3IICWkhFlw==
+jest-simple-config@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/jest-simple-config/-/jest-simple-config-0.4.2.tgz#3580a1eb71f3f9e4c479e3dde0732f6c515c471c"
+  integrity sha512-7npVQJWREVQ2R9lstEKzHfYgCZzrfgL9DlJyu4Ndcp0ltcYS8B0S4JYuH1B5iGojyo+dTk9mf6brWMT6feaC6g==
 
 jest-snapshot@^27.4.6:
   version "27.4.6"
