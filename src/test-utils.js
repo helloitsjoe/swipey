@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { fireEvent } from '@testing-library/dom';
 import { Directions } from './index';
 

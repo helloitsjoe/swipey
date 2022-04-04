@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/extensions
 import { getTimestamp, validateOptions } from './utils.js';
 
 export const Directions = {
@@ -27,14 +28,14 @@ export default function onSwipe(direction, handler, options = {}) {
   let scrollY;
   let startTimestamp;
 
-  const setDown = e => {
+  const setDown = (e) => {
     downX = e.touches[0].clientX;
     downY = e.touches[0].clientY;
     scrollY = window.scrollY;
     startTimestamp = getTimestamp();
   };
 
-  const setUp = e => {
+  const setUp = (e) => {
     upX = e.changedTouches[0].clientX;
     upY = e.changedTouches[0].clientY;
 

@@ -36,13 +36,13 @@ describe('onSwipe', () => {
       ${DOWN}
     `('Triggers on swipe $direction', ({ direction }) => {
       const otherDirections = Object.values(Directions).filter(
-        dir => dir !== direction
+        (dir) => dir !== direction
       );
       expect(otherDirections.includes(direction)).toBe(false);
 
       offSwipe = onSwipe(direction, handler);
 
-      otherDirections.forEach(dir => {
+      otherDirections.forEach((dir) => {
         swipes[dir]();
       });
 
